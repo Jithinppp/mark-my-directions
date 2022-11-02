@@ -1,0 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap");
+
+:root {
+  --color-background: #404040;
+  --color-primary: #2bc63a;
+  --color-secondary: #ff6259;
+}
+* {
+  font-family: "Rubik", sans-serif;
+  box-sizing: border-box;
+}
+body {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center; */
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: 100vh;
+  padding: 2rem;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.input-controls {
+  display: grid;
+  grid-template-rows: 1fr 6fr 0.5fr;
+  height: 100%;
+  padding: 1rem;
+  color: #fff;
+  background-color: var(--color-background);
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  letter-spacing: -1px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+.logo-container svg {
+  margin-right: 5px;
+  height: 25px;
+  width: 25px;
+  color: #fff;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+}
+.footer-logo svg {
+  height: 18px;
+  width: 18px;
+  margin: 0 1rem;
+}
+.map-container {
+  outline: none;
+}
+
+.leaflet-popup,
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background-color: var(--color-background);
+  border-radius: 5px;
+  color: #fff;
+}
+
+.running-popup {
+  border-left: 5px solid var(--color-primary);
+}
+.cycling-popup {
+  border-left: 5px solid var(--color-secondary);
+}
+.leaflet-popup-content,
+.leaflet-popup-content p {
+  font-size: 0.9rem;
+  margin: 0.7rem;
+}
+.leaflet-container a.leaflet-popup-close-button {
+  color: rgba(255, 255, 255, 0.538);
+}
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: #fff;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 0.8rem;
+  background-color: #4e4e555c;
+}
+.row-workout {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 0.5rem 0;
+}
+.form-input {
+  font-size: 0.9rem;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  margin-left: 2px;
+  padding: 3px;
+  padding-left: 5px;
+  width: 85px;
+  height: 25px;
+}
+.form-input:focus {
+  background-color: rgb(230, 230, 230);
+}
+
+/* hidden */
+.hidden {
+  display: none;
+}
