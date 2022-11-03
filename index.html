@@ -45,7 +45,7 @@
         <form class="form hidden">
           <div class="row-workout">
             <label>Type</label>
-            <select name="" id="" class="form-input">
+            <select name="" id="input__type" class="form-input">
               <option value="running">Running</option>
               <option value="cycling">Cycling</option>
             </select>
@@ -56,8 +56,8 @@
               placeholder="km"
               type="text"
               name=""
-              id=""
-              class="form-input input__distance"
+              id="input__distance"
+              class="form-input"
             />
           </div>
           <div class="row-workout">
@@ -66,7 +66,7 @@
               placeholder="min"
               type="text"
               name=""
-              id=""
+              id="input__duration"
               class="form-input"
             />
           </div>
@@ -76,12 +76,34 @@
               placeholder="step/min"
               type="text"
               name=""
-              id=""
+              id="input__cadence"
+              class="form-input"
+            />
+          </div>
+          <div class="row-workout form__row--hidden">
+            <label>Elvn gain</label>
+            <input
+              placeholder="meters"
+              type="text"
+              name=""
+              id="input__elevation-gain"
               class="form-input"
             />
           </div>
           <input type="submit" hidden />
         </form>
+        <!-- workout cards -->
+        <div class="workout__container">
+          <!-- <div class="single-workout__container running-popup">
+            <h3 class="single-workout__headline">Running on august 13</h3>
+            <div class="single-workout__description">
+              <span>🏃 2KM</span>
+              <span>⌛ 2MIN</span>
+              <span>⚡ 10km/hr</span>
+              <span>👣 2SPM</span>
+            </div>
+          </div> -->
+        </div>
       </div>
       <!-- footer -->
       <div class="footer">
