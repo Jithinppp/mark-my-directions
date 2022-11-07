@@ -12,9 +12,8 @@ const inputElevationGain = document.getElementById("input__elevation-gain");
 
 const d = new Date();
 const date = `${d.getDate()}-${d.getMonth()}-${d.getFullYear()}`;
-console.log(date);
 
-//! classes for data manipulation
+// classes for data manipulation
 class Workout {
   date = date;
   id = "id" + new Date().getTime();
@@ -35,7 +34,7 @@ class Running extends Workout {
   }
   clcPace() {
     // min/km
-    this.pace = Math.floor(this.duration / this.distance);
+    this.pace = this.duration / this.distance;
     return this.pace;
   }
 }
@@ -49,14 +48,15 @@ class Cycling extends Workout {
   }
   calcSpeed() {
     // km/h
-    this.speed = Math.floor(this.distance / this.duration);
+    this.speed = this.distance / this.duration;
   }
 }
 
-//! main app class for whole global code APPLICATION
+// main app class for whole global code APPLICATION
 class App {
   // private variables goes here
   #map;
+  #mapZoom = 13;
   #mapEvent;
   #workouts = [];
 
@@ -67,6 +67,11 @@ class App {
     form.addEventListener("submit", this._newWorkout.bind(this));
     // input type change eventHandler will make cadence or elevation gain toggle hidden class
     inputType.addEventListener("change", this._toggleElevationField);
+    // move marker to selected workout
+    workoutContainer.addEventListener(
+      "click",
+      this._setViewToWorkout.bind(this)
+    );
   }
 
   // necessary functions _convention stands for private
@@ -95,7 +100,7 @@ class App {
     const { longitude } = position.coords;
     const cords = [latitude, longitude];
     // open street map imported and using L from it and make it as global variable
-    this.#map = L.map("map").setView(cords, 13);
+    this.#map = L.map("map").setView(cords, this.#mapZoom);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -108,7 +113,18 @@ class App {
     // making mapEvent as global to access in form submission
     this.#mapEvent = mapEvnt;
     form.classList.remove("hidden");
+    form.style.display = "grid";
     inputDistance.focus();
+  }
+
+  _hideForm() {
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevationGain.value =
+        "";
+    form.style.display = "none";
+    form.classList.add("hidden");
   }
 
   _newWorkout(e) {
@@ -147,7 +163,6 @@ class App {
     }
     // add to workout array
     this.#workouts.push(workout);
-    console.log(workout);
 
     // render the workout as map marker
     this._renderWorkoutMarker(workout);
@@ -156,17 +171,15 @@ class App {
     this._renderWorkout(workout);
 
     // hide form and clearing form
-    inputDistance.value =
-      inputDuration.value =
-      inputCadence.value =
-      inputElevationGain.value =
-        "";
+    this._hideForm();
   }
 
   _renderWorkoutMarker(workout) {
     const [lat, lng] = workout.cords;
     let popup = L.popup([lat, lng], {
-      content: `<p>${workout.type}</p>`,
+      content: `<p>${workout.type == "running" ? "🏃" : "🚲"} ${
+        workout.type
+      } on ${workout.date}</p>`,
       autoClose: false,
       closeOnClick: false,
       maxWidth: 250,
@@ -185,20 +198,44 @@ class App {
   }
 
   _renderWorkout(workout) {
-    const html = `<div class="single-workout__container ${workout.type}-popup">
-              <h3 class="single-workout__headline">${workout.type} on ${
-      workout.date
-    }</h3>
-              <div class="single-workout__description">
-                <span>🏃${workout.distance} Km</span> 
-                <span>⌛${workout.duration} Min</span> 
-                <span>⚡${
-                  workout.type == "running" ? workout.pace : workout.speed
-                }km/hr</span>
-                <span>👣2SPM</span>
+    const html = `<div data-id=${workout.id} class="single-workout__container ${
+      workout.type
+    }-popup">
+        <h3 class="single-workout__headline">${
+          workout.type[0].toUpperCase() + workout.type.slice(1)
+        } on ${workout.date}</h3>
+          <div class="single-workout__description">
+            <span>${workout.distance} Km</span> 
+            <span>${workout.duration} Min</span> 
+            <span>${
+              workout.type == "running"
+                ? workout.pace.toFixed(1) + " Min/km"
+                : workout.speed.toFixed(1) + " Km/h"
+            }</span>
+            <span>${
+              workout.type == "running"
+                ? workout.cadence + "s/min"
+                : workout.elevationGain + "m"
+            }</span>
             </div>
           </div>`;
     workoutContainer.insertAdjacentHTML("afterbegin", html);
+  }
+
+  _setViewToWorkout(e) {
+    const workoutEL = e.target.closest(".single-workout__container");
+    if (!workoutEL) return; //guard class
+
+    const workout = this.#workouts.find(
+      (item) => item.id === workoutEL.dataset.id
+    );
+    // setting view with setView function
+    this.#map.setView(workout.cords, this.#mapZoom, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
   }
 }
 
